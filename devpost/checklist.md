@@ -11,7 +11,7 @@ Build mode: fast
 
 Slice 1 passed all eight Vitest storage checks and the production build. The learner ran the app from a regular terminal, completed draft reload/resume, review correction, save/readback, and approved the early checkpoint. Saved-log editing was requested and clarified as already planned in slice 3. Agent browser inspection remains constrained by the session; do not claim keyboard or reduced-motion browser checks were performed.
 
-Slice 1 is committed as `f96d2c9`. Slice 2 is implemented; all 13 tests and the production build pass. The learner's dev server initially served the app (HTTP 200) but stopped before module inspection. Headless Chrome remains unusable for interaction checks in this session. Next: learner browser check of catch-up, past-date draft reload/resume, and week/day retrieval, then commit slice 2 from the regular terminal. This session has read-only access to `.git`; staging is denied. Do not proceed to slice 3 before the slice 2 checkpoint is committed. Empty-state, keyboard, and reduced-motion interaction checks remain for final review.
+Slices 1 and 2 are committed as `f96d2c9` and `633e831`. The learner completed the catch-up/history/draft checks and reported done. Slice 3 is implemented; all 16 tests and the production build pass. Final hands-on exploration and the slice 3 commit remain. This session has read-only access to `.git`; commits require the learner's regular terminal. Headless Chrome is unusable for interaction checks in this session. Empty-state, keyboard, and reduced-motion interaction checks remain for final review.
 
 Direct Node checks passed for draft reload, completed save/readback, snapshot immutability, refusal of unconfirmed replacement, failed-write protection, malformed-data rejection, and basic calendar validity. Text and action contrast checks passed (5.47:1 or higher for tested pairs). These checks do not replace the pending framework build, full test suite, or browser verification.
 
@@ -27,7 +27,7 @@ Direct Node checks passed for draft reload, completed save/readback, snapshot im
   Learner check: Open `http://localhost:5173`, enter a few answers, reload partway, resume, finish all six prompts, change an answer in review, save, and open the saved day. Report how the writing flow feels and whether anything is confusing.
   Commit: `Add persistent guided daily logging`
 
-- [ ] **2. Catch up on past days and find work by week**
+- [x] **2. Catch up on past days and find work by week**
   Becomes usable: Select today or a past date, resume unfinished days under Profile → Drafts, and retrieve saved answers through Profile → Logs → week → day.
   Why now: Builds the look-back purpose on real saved logs after early feedback on writing; calendar checks establish reliable grouping before replacement actions are added.
   PRD ref: `prd.md > Choose a Date and Catch Up`, `Browse Logs by Week and Day`, `Keep and Resume Drafts`.
@@ -50,13 +50,17 @@ Direct Node checks passed for draft reload, completed save/readback, snapshot im
 ## Hands-on Checkpoints
 
 - [x] Early usable behavior explored — after slice 1; learner completed the walkthrough and confirmed “everything looks good then.” Saved-log editing remains planned in slice 3.
-- [ ] Final kick-the-tires exploration and feedback completed — after slice 3, using the full core journey and awkward inputs
+- [x] Final kick-the-tires exploration and feedback completed — learner reports behavior matches the agreed plan and likes the appearance; logo, dark mode, and discard improvements are explicitly deferred.
 
 Learn mode includes a learner check after every slice. Fast mode pauses at the early and final checkpoints; slice 2's learner check is available during final exploration.
 
 ## Final Review
 
 Verify the running app against the PRD acceptance criteria, including empty states, blanks, catch-up, drafts, replacement protection, persistence errors, keyboard use, and reduced motion. Record agreed refinements below as unchecked tasks; verify, commit, and have the learner retry them before completion.
+
+Mechanical evidence: 16 tests pass across storage and calendar; production build succeeds. Storage checks cover draft retention, unsupported/malformed data, new-save failure, unconfirmed replacement refusal, edit/restart isolation, existing-draft reuse, failed replacement/retry, immutable first-use anchor, createdAt preservation, and unrelated-draft protection. Learner reports the app works as discussed after the final review prompt. Detailed keyboard/reduced-motion checks were not individually reported and agent browser checks remain unavailable.
+
+Feedback outcome: current appearance and behavior accepted. Logo replacement, dark mode, and a discard button are saved in `devpost/improvements.md` for another session. No current revision requested. Final completion awaits the slice 3 commit and confirmation that the current PoC is ready.
 
 - [ ] Final review complete — feedback resolved and learner confirms ready to ship
 
@@ -66,9 +70,9 @@ Verify the running app against the PRD acceptance criteria, including empty stat
 - [ ] Optional edit and transfer reflection addressed — offered/declined/already covered/not applicable as appropriate
 - [ ] `devpost/app-map.html` generated from finished code, checked, and shown, including a project-grounded practice to reuse
 
-Activity and evidence: Pending; connect an actual logging behavior to its spec, implementation, and verification.
-Route and stops: Pending actual code locations.
-Edit outcome: Pending optional safe edit.
+Activity and evidence: App map prepared and checked offline: all referenced paths and source anchors exist, section tags balance, no scripts or external resources. A brief learning wrap-up remains: connect the protected-replacement requirement to `saveDraft`, its failed-write/retry test, and Completion; do not claim interactive practice from these prepared instructions.
+Route and stops: Prepared reference route: `src/App.jsx > save`, `src/lib/storage.js > saveDraft`, `src/components/Completion.jsx`. Interactive route not yet completed.
+Edit outcome: No edit made; learner deferred improvements to another session.
 Reflection: Not yet offered; personal answers belong only in the ignored learner profile.
 Activity mode: Pending guided live app/editor route or suitable focused alternative.
 

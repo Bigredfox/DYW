@@ -32,6 +32,14 @@ export function newDraft(date, answers = Array(6).fill(''), mode = 'new') {
 export function withDraft(snapshot, draft) {
   return { ...snapshot, draftsByDate: { ...snapshot.draftsByDate, [draft.date]: draft } };
 }
+export function prepareReplacement(snapshot, date, mode) {
+  if (!['edit', 'restart'].includes(mode) || !snapshot.savedByDate[date]) throw new Error('Open an existing saved log to edit or start over.');
+  const existing = snapshot.draftsByDate[date];
+  if (existing) return { draft: existing, resumed: true };
+  const draft = newDraft(date, mode === 'edit' ? snapshot.savedByDate[date].answers : Array(6).fill(''), mode);
+  if (mode === 'edit') { draft.stage = 'review'; draft.promptIndex = 5; }
+  return { draft, resumed: false };
+}
 export function saveDraft(storage, snapshot, draft, confirmed = false) {
   const previous = snapshot.savedByDate[draft.date];
   if (previous && !confirmed) throw new Error('Confirm overwriting before replacing this log.');

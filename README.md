@@ -30,4 +30,12 @@ Start today's reflection, type a few answers, reload, and continue the draft. Co
 
 Choose another day from Home to catch up on past work. Profile → Drafts resumes unfinished entries; Profile → Logs opens weeks and saved days. Weeks run Monday–Sunday from your first-use week; older catch-up dates show “Before first use” with their date range. Future dates are rejected.
 
-Protected editing arrives in the next slice. First use starts empty. Use fictional sample answers for demonstration.
+Every saved day has a top-right three-dot menu with **Edit** and **Start Over**. Edit opens review with the saved answers; Start Over begins with blank answers. Existing unfinished work for the same date is resumed instead of erased. Saving a replacement asks for confirmation. Canceling, leaving, or a failed write keeps the old saved log intact.
+
+## Demo walkthrough
+
+First use starts empty. Enter two or three fictional sample logs through **Choose another day**, using days from two different calendar weeks. Label the content as sample data when showing it in the video. No sample history is automatically inserted.
+
+Show the welcome, six guided prompts, a correction in review, Save, and warm completion. Then open Profile → Logs → a week → a past day. Demonstrate draft resumption and safe editing if useful; the required short video can concentrate on writing and retrieval.
+
+For the final hands-on check, try editing a saved past day, cancel replacement and verify the original, then save a confirmed change. Try Start Over and leave before saving: the original should still be in Logs and unfinished answers should be in Drafts. Use Tab/Shift+Tab and Escape in the overwrite dialog, and check the app in a narrow window. Blank and long answers are supported; future dates are rejected.

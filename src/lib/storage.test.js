@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { STORAGE_KEY, emptySnapshot, loadSnapshot, newDraft, withDraft, writeSnapshot, saveDraft } from './storage.js';
+import { STORAGE_KEY, emptySnapshot, loadSnapshot, newDraft, withDraft, writeSnapshot, saveDraft, prepareReplacement } from './storage.js';
 
 function memoryStorage() {
   const values = new Map();
@@ -55,5 +55,52 @@ describe('durable logging', () => {
   });
   it('surfaces unavailable storage instead of creating a false empty history', () => {
     expect(() => loadSnapshot({ getItem() { throw new Error('Access denied'); } }, '2026-10-02')).toThrow('Access denied');
+  });
+  it('prepares editing with saved answers and start-over with blanks without altering the saved day', () => {
+    const storage = memoryStorage();
+    const saved = saveDraft(storage, emptySnapshot('2026-10-04'), newDraft('2026-09-30', ['original work', 'skill', '', '', '', 'person']));
+    const raw = storage.getItem(STORAGE_KEY);
+    const editing = prepareReplacement(saved, '2026-09-30', 'edit');
+    expect(editing.draft.answers).toEqual(saved.savedByDate['2026-09-30'].answers);
+    expect(editing.draft.stage).toBe('review');
+    editing.draft.answers[0] = 'changed in draft';
+    expect(saved.savedByDate['2026-09-30'].answers[0]).toBe('original work');
+    const restart = prepareReplacement(saved, '2026-09-30', 'restart');
+    expect(restart.draft.answers).toEqual(Array(6).fill(''));
+    expect(restart.draft.stage).toBe('prompt');
+    expect(restart.draft.date).toBe('2026-09-30');
+    expect(storage.getItem(STORAGE_KEY)).toBe(raw);
+  });
+  it('resumes existing unfinished work instead of discarding it on Edit or Start Over', () => {
+    const storage = memoryStorage();
+    const saved = saveDraft(storage, emptySnapshot('2026-10-04'), newDraft('2026-09-30'));
+    const draft = { ...newDraft('2026-09-30', ['unfinished', '', '', '', '', '']), promptIndex: 3 };
+    const before = withDraft(saved, draft);
+    for (const mode of ['edit', 'restart']) expect(prepareReplacement(before, draft.date, mode)).toEqual({ draft, resumed: true });
+    expect(draft.answers[0]).toBe('unfinished');
+  });
+  it('keeps the original saved day and draft on failed replacement, then replaces atomically on retry', () => {
+    const storage = memoryStorage();
+    const original = saveDraft(storage, emptySnapshot('2026-10-04'), newDraft('2026-09-30', ['original', '', '', '', '', '']));
+    const draft = prepareReplacement(original, '2026-09-30', 'edit').draft;
+    draft.answers[0] = 'replacement';
+    const unrelated = newDraft('2026-10-01', ['another day', '', '', '', '', '']);
+    const before = withDraft(withDraft(original, draft), unrelated);
+    writeSnapshot(storage, before);
+    const raw = storage.getItem(STORAGE_KEY);
+    const setItem = storage.setItem;
+    storage.setItem = () => { throw new Error('Quota exceeded'); };
+    expect(() => saveDraft(storage, before, draft, true)).toThrow('Quota exceeded');
+    expect(storage.getItem(STORAGE_KEY)).toBe(raw);
+    expect(before.savedByDate[draft.date].answers[0]).toBe('original');
+    expect(before.draftsByDate[draft.date].answers[0]).toBe('replacement');
+    storage.setItem = setItem;
+    const after = saveDraft(storage, before, draft, true);
+    expect(after.savedByDate[draft.date].answers[0]).toBe('replacement');
+    expect(after.savedByDate[draft.date].createdAt).toBe(original.savedByDate[draft.date].createdAt);
+    expect(Object.keys(after.savedByDate)).toEqual([draft.date]);
+    expect(after.draftsByDate[draft.date]).toBeUndefined();
+    expect(after.draftsByDate[unrelated.date]).toEqual(unrelated);
+    expect(after.firstUseMonday).toBe('2026-09-28');
   });
 });

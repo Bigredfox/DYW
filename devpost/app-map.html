@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Daily Work Log — App Map</title>
+  <style>
+    :root{font-family:"Segoe UI",system-ui,sans-serif;color:#193d50;background:#eff7fb;line-height:1.65}*{box-sizing:border-box}body{margin:0}main{max-width:940px;margin:auto;padding:48px 24px}h1{font-size:2.6rem;line-height:1.15;letter-spacing:-1px}h2{font-size:1.4rem;margin-top:0}.eyebrow{color:#236b78;text-transform:uppercase;letter-spacing:2px;font-size:.75rem;font-weight:700}.intro{color:#496879;max-width:680px}section{background:white;border:1px solid #dce8ee;border-radius:18px;padding:28px;margin-top:24px}code{background:#eff7fb;border-radius:4px;padding:2px 5px;font-size:.88em;overflow-wrap:anywhere}pre{white-space:pre-wrap;background:#eff7fb;padding:18px;border-radius:10px}pre code{padding:0}a{color:#236b78}a:focus-visible,summary:focus-visible{outline:3px solid #236b78;outline-offset:4px}.flow{display:flex;gap:12px;align-items:stretch;flex-wrap:wrap}.node{flex:1;min-width:180px;background:#eff7fb;padding:16px;border-radius:12px}.node strong,.node span{display:block}.node span{font-size:.85rem;color:#496879}.arrow{align-self:center;color:#236b78;font-size:1.4rem}li{margin-bottom:14px}dt{font-weight:650;margin-top:16px}dd{margin:5px 0 16px;color:#496879}.small{font-size:.85rem;color:#496879}summary{cursor:pointer;color:#236b78;font-weight:600}footer{margin-top:24px;color:#496879;font-size:.85rem}@media(max-width:600px){main{padding:24px 16px}section{padding:22px}h1{font-size:2rem}.flow{flex-direction:column}.arrow{transform:rotate(90deg)}}
+  </style>
+</head>
+<body><main>
+  <p class="eyebrow">Your take-home guide</p>
+  <h1>Daily Work Log<br>Where the behavior lives.</h1>
+  <p class="intro">Six gentle prompts capture a day's work. A draft keeps unfinished answers; saving creates a completed log. Profile opens drafts or saved weeks and days. Everything stays in this browser.</p>
+  <section aria-labelledby="flow-title">
+    <h2 id="flow-title">Follow one action: replacing a saved log</h2>
+    <div class="flow" role="list" aria-label="Save replacement flow">
+      <div class="node" role="listitem"><strong>Review → Save</strong><span><code>App.jsx → save</code><br>Checks whether confirmation is needed.</span></div>
+      <span class="arrow" aria-hidden="true">→</span>
+      <div class="node" role="listitem"><strong>Confirm → persist</strong><span><code>storage.js → saveDraft</code><br>Writes the saved log and removes its draft in one snapshot.</span></div>
+      <span class="arrow" aria-hidden="true">→</span>
+      <div class="node" role="listitem"><strong>Show success</strong><span><code>Completion.jsx</code><br>Appears only after storage succeeds.</span></div>
+    </div>
+    <p class="small">If writing fails, review retains the answers and the previous saved log remains intact. There is no server or external log service.</p>
+  </section>
+  <section>
+    <h2>A three-stop reference route</h2>
+    <p>This route points to the finished code. It does not imply an interactive code tour has been completed.</p>
+    <ol>
+      <li><code>src/App.jsx</code> — search for <code>function save</code>. A saved date first opens <code>OverwriteDialog</code>. Confirmation calls <code>save(true)</code>; cancellation returns to review.</li>
+      <li><code>src/lib/storage.js</code> — search for <code>saveDraft</code>. It creates a separate snapshot, preserves the original <code>createdAt</code>, removes only the matching draft, and calls <code>writeSnapshot</code>.</li>
+      <li><code>src/components/Completion.jsx</code> — the visible result. Back in <code>App.jsx</code>, <code>setScreen('complete')</code> happens after the storage call; a thrown error takes the failure path instead.</li>
+    </ol>
+    <details><summary>See the evidence behind this route</summary><p><code>devpost/prd.md → Edit or Replace an Existing Daily Log</code> defines the protection. <code>src/lib/storage.test.js</code> checks the case named “keeps the original saved day and draft on failed replacement, then replaces atomically on retry.” The browser walkthrough checks the visible confirmation behavior.</p></details>
+  </section>
+  <section>
+    <h2>To change this, start here</h2>
+    <dl>
+      <dt>Greeting or six prompt labels</dt><dd><code>src/config.js</code>: <code>displayName</code> and <code>prompts</code>.</dd>
+      <dt>Logo</dt><dd><code>src/App.jsx</code>: the brand button. Styling lives in <code>src/styles.css</code>, under <code>.brand-mark</code>.</dd>
+      <dt>Colors, spacing, or a future dark theme</dt><dd><code>src/styles.css</code>: start with <code>:root</code> and the action/panel rules. Check text contrast and narrow screens after changes.</dd>
+      <dt>Week labels and calendar grouping</dt><dd><code>src/lib/calendar.js</code>: <code>weekNumber</code> and <code>groupSavedWeeks</code>. Verify with <code>calendar.test.js</code>.</dd>
+      <dt>Future discard behavior</dt><dd>First define what is discarded and what stays safe. Then inspect <code>SavedLog.jsx</code>, <code>DraftsBrowser.jsx</code>, and the storage repository. The current saved menu has exactly Edit and Start Over.</dd>
+    </dl>
+    <p>Deferred ideas are saved in <a href="improvements.md">improvements.md</a>.</p>
+  </section>
+  <section>
+    <h2>A practice to reuse</h2>
+    <p>Turn a requirement into an observable result before asking an agent to implement it. Here, “protect the old log” became a concrete condition: a canceled or failed replacement leaves the original saved answers unchanged. The PRD names it, <code>saveDraft</code> implements it, and the storage tests check it.</p>
+    <p>For a future discard button, first agree on which record disappears and which record must remain. That decision gives the code and verification a clear target.</p>
+  </section>
+  <section>
+    <h2>Run it again</h2>
+    <pre><code>npm.cmd install
+npm.cmd run dev
+
+# Verify
+npm.cmd test -- --run
+npm.cmd run build</code></pre>
+    <p>Open <code>http://localhost:5173</code> using the same browser profile. Data lives under <code>daily-work-log:v1</code> in localStorage. Clearing site data removes it; use one active tab.</p>
+  </section>
+  <footer>Map snapshot: the final implementation prepared for “Add protected editing and replacement of saved logs,” after history checkpoint <code>633e831</code>. The final source commit is pending. This guide can drift when the app changes; refresh it with the affected behavior.</footer>
+</main></body></html>

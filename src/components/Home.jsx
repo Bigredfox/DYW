@@ -1,0 +1,4 @@
+import { displayName } from '../config.js';
+export default function Home({ today, draft, saved, onStart, onView }) {
+  return <section className="home"><p className="eyebrow">A little reflection. A lasting record.</p><h1>Hi, {displayName}.<br/><span>Your work is worth remembering.</span></h1><p className="intro">Take a quiet moment to capture your day.<br/>Six gentle prompts, one step at a time.</p><div className="home-actions"><button className="primary" onClick={onStart}>{draft ? 'Continue your log' : saved ? 'View today’s log' : 'Log today’s work'} <span aria-hidden="true">↗</span></button><p className="small">{today} · Your own space to reflect</p></div>{saved && draft && <button className="text-button" onClick={onView}>View today’s saved answers</button>}<div className="home-note"><span aria-hidden="true">✧</span><p>Small steps add up.<br/><span>Keep a trail of what you’re learning.</span></p></div></section>;
+}

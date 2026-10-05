@@ -1,0 +1,13 @@
+# Personal learning context — stays out of commits by default
+/devpost/learner-profile.md
+
+# Local secrets; keep a secret-free example committable
+.env
+.env.*
+!.env.example
+
+# Generated dependencies and build output
+/node_modules/
+/dist/
+/.npm-cache/
+/.browser-check/

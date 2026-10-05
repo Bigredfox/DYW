@@ -28,4 +28,6 @@ If writing fails, keep the tab open and retry: the latest answers remain in memo
 
 Start today's reflection, type a few answers, reload, and continue the draft. Complete all six prompts (blank answers are welcome), correct something in review, save, and view the saved day. Reopen the app to confirm persistence.
 
-Past-date selection, week/day history, the Drafts browser, and protected editing arrive in subsequent slices. First use starts empty. Use fictional sample answers for demonstration.
+Choose another day from Home to catch up on past work. Profile → Drafts resumes unfinished entries; Profile → Logs opens weeks and saved days. Weeks run Monday–Sunday from your first-use week; older catch-up dates show “Before first use” with their date range. Future dates are rejected.
+
+Protected editing arrives in the next slice. First use starts empty. Use fictional sample answers for demonstration.

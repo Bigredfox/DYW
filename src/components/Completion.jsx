@@ -1,3 +1,3 @@
-export default function Completion({ onHome, onView }) {
-  return <section className="card completion"><div className="success-mark" aria-hidden="true">✓</div><p className="eyebrow">Safely saved</p><h1>Thank you for showing up.</h1><p className="intro">Your work has a place to live now.<br/>Come back tomorrow for another small reflection.</p><div className="button-row"><button className="primary" onClick={onView}>View saved log →</button><button className="secondary" onClick={onHome}>Back home</button></div></section>;
+export default function Completion({ onHome, onView, date, today }) {
+  return <section className="card completion"><div className="success-mark" aria-hidden="true">✓</div><p className="eyebrow">Safely saved</p><h1>Thank you for showing up.</h1><p className="intro">{date === today ? 'Your work has a place to live now.' : 'That day’s work has a place to live now.'}<br/>Come back tomorrow for another small reflection.</p><div className="button-row"><button className="primary" onClick={onView}>View saved log →</button><button className="secondary" onClick={onHome}>Back home</button></div></section>;
 }

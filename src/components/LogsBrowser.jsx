@@ -1,0 +1,8 @@
+import { useState } from 'react';
+import { formatDay, groupSavedWeeks } from '../lib/calendar.js';
+export default function LogsBrowser({ snapshot, onOpen, onStart }) {
+  const [selected, setSelected] = useState(null);
+  const weeks = groupSavedWeeks(snapshot.savedByDate, snapshot.firstUseMonday);
+  const week = weeks.find(item => item.monday === selected);
+  return <section className="card"><p className="eyebrow">Profile / Logs</p><h1>{week ? week.label : 'Your work, remembered.'}</h1><p className="hint">{week ? `${formatDay(week.monday)} – ${formatDay(week.sunday)}` : 'Open a week, then choose a day to revisit your reflection.'}</p>{!weeks.length ? <div className="empty-state"><p>Your story starts with one day. Saved logs will appear here.</p><button className="primary" onClick={onStart}>Create a new log</button></div> : week ? <><button className="back-link" onClick={() => setSelected(null)}>← All weeks</button><div className="browse-list">{week.entries.map(entry => <button className="browse-item" key={entry.date} onClick={() => onOpen(entry.date)}><span><strong>{formatDay(entry.date)}</strong><span className="item-detail">{entry.answers[0] || 'No answer for work done'}</span></span><span aria-hidden="true">→</span></button>)}</div></> : <div className="browse-list">{weeks.map(item => <button className="browse-item" key={item.monday} onClick={() => setSelected(item.monday)}><span><strong>{item.label}</strong><span className="item-detail">{formatDay(item.monday)} – {formatDay(item.sunday)}</span><span className="item-detail">{item.entries.length} saved {item.entries.length === 1 ? 'day' : 'days'}</span></span><span aria-hidden="true">→</span></button>)}</div>}</section>;
+}

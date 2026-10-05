@@ -4,7 +4,10 @@ import GuidedEntry from './components/GuidedEntry.jsx';
 import Review from './components/Review.jsx';
 import Completion from './components/Completion.jsx';
 import SavedLog from './components/SavedLog.jsx';
-import { localToday, formatDay } from './lib/calendar.js';
+import DatePicker from './components/DatePicker.jsx';
+import LogsBrowser from './components/LogsBrowser.jsx';
+import DraftsBrowser from './components/DraftsBrowser.jsx';
+import { localToday, formatDay, canLogDate } from './lib/calendar.js';
 import { loadSnapshot, newDraft, withDraft, writeSnapshot, saveDraft } from './lib/storage.js';
 
 export default function App() {
@@ -14,6 +17,7 @@ export default function App() {
   const [draft, setDraft] = useState(null);
   const [screen, setScreen] = useState('home');
   const [savedDate, setSavedDate] = useState(null);
+  const [profileOpen, setProfileOpen] = useState(false);
   const pending = useRef(null);
   const main = useRef(null);
   const today = localToday();
@@ -25,7 +29,7 @@ export default function App() {
   useEffect(() => { if (screen !== 'prompt') main.current?.focus(); }, [screen]);
   function persistDraft(nextDraft) {
     setDraft(nextDraft);
-    const next = withDraft(snapshot, nextDraft);
+    const next = withDraft(pending.current ?? snapshot, nextDraft);
     try { setSnapshot(writeSnapshot(window.localStorage, next)); pending.current = null; setWriteError(''); }
     catch { pending.current = next; setWriteError('Your latest changes are only in this tab. Keep it open and retry to preserve your draft.'); }
   }
@@ -34,11 +38,12 @@ export default function App() {
     try { setSnapshot(writeSnapshot(window.localStorage, pending.current)); pending.current = null; setWriteError(''); }
     catch { setWriteError('Storage is still unavailable. Your latest answers remain in this tab. Please keep it open and retry.'); }
   }
-  function start() {
-    const existing = pending.current?.draftsByDate[today] ?? snapshot.draftsByDate[today];
+  function start(date = today) {
+    if (!canLogDate(date, localToday())) { setWriteError('Choose today or a valid date in the past.'); return; }
+    const existing = (pending.current ?? snapshot).draftsByDate[date];
     if (existing) { setDraft(existing); setScreen(existing.stage); }
-    else if (snapshot.savedByDate[today]) { setSavedDate(today); setScreen('saved'); }
-    else { persistDraft(newDraft(today)); setScreen('prompt'); }
+    else if (snapshot.savedByDate[date]) { setSavedDate(date); setScreen('saved'); }
+    else { persistDraft(newDraft(date)); setScreen('prompt'); }
   }
   function change(index, value) {
     const answers = [...draft.answers]; answers[index] = value;
@@ -55,15 +60,21 @@ export default function App() {
     } catch (error) { setWriteError(`Your log wasn’t saved. ${error.message} Your answers remain here; try Save log again.`); }
   }
   function home() { if (draft) setDraft(null); setScreen('home'); }
-  return <div className="app"><header className="site-header"><button className="brand" onClick={home}><span className="brand-mark" aria-hidden="true">◒</span> Daily Work Log</button><span className="header-note">A moment for yourself</span></header><main ref={main} tabIndex="-1">
+  function navigate(next) { setProfileOpen(false); setDraft(null); setScreen(next); }
+  function resume(entry) { setDraft(entry); setScreen(entry.stage); }
+  function openSaved(date) { setSavedDate(date); setScreen('saved'); }
+  return <div className="app"><header className="site-header"><button className="brand" onClick={home}><span className="brand-mark" aria-hidden="true">◒</span> Daily Work Log</button><div className="header-right"><span className="header-note">A moment for yourself</span>{snapshot && <div className="profile-nav" onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget)) setProfileOpen(false); }} onKeyDown={event => { if (event.key === 'Escape') { setProfileOpen(false); event.currentTarget.querySelector('button').focus(); } }}><button className="secondary" aria-expanded={profileOpen} aria-controls="profile-links" onClick={() => setProfileOpen(!profileOpen)}>Profile <span aria-hidden="true">⌄</span></button>{profileOpen && <nav id="profile-links" aria-label="Profile" className="nav-popover"><button onClick={() => navigate('logs')}>Logs</button><button onClick={() => navigate('drafts')}>Drafts</button></nav>}</div>}</div></header><main ref={main} tabIndex="-1">
     {loadError ? <section className="card" role="alert"><h1>Let’s keep your work safe.</h1><p>{loadError}</p><button className="primary" onClick={load}>Retry opening logs</button></section> : !snapshot ? <p role="status">Opening your space…</p> : <>
       {screen !== 'home' && <button className="back-link" onClick={home}>← Home</button>}
       {writeError && <div className="error-banner" role="alert"><p>{writeError}</p>{pending.current && <button className="secondary" onClick={retry}>Retry draft storage</button>}</div>}
-      {screen === 'home' && <Home today={formatDay(today)} draft={(pending.current ?? snapshot).draftsByDate[today]} saved={snapshot.savedByDate[today]} onStart={start} onView={() => { setSavedDate(today); setScreen('saved'); }}/>}
+      {screen === 'home' && <Home today={formatDay(today)} draft={(pending.current ?? snapshot).draftsByDate[today]} saved={snapshot.savedByDate[today]} onStart={() => (pending.current ?? snapshot).draftsByDate[today] || snapshot.savedByDate[today] ? start() : setScreen('date')} onChooseDate={() => setScreen('date')} onView={() => openSaved(today)}/>}
+      {screen === 'date' && <DatePicker today={today} onStart={start}/>}
       {screen === 'prompt' && draft && <GuidedEntry draft={draft} onChange={change} onAdvance={advance}/>}
       {screen === 'review' && draft && <Review draft={draft} onChange={change} onSave={save}/>}
-      {screen === 'complete' && <Completion onHome={home} onView={() => setScreen('saved')}/>}
+      {screen === 'complete' && <Completion date={savedDate} today={today} onHome={home} onView={() => setScreen('saved')}/>}
       {screen === 'saved' && snapshot.savedByDate[savedDate] && <SavedLog entry={snapshot.savedByDate[savedDate]}/>}
+      {screen === 'logs' && <LogsBrowser snapshot={snapshot} onOpen={openSaved} onStart={() => start()}/>}
+      {screen === 'drafts' && <DraftsBrowser draftsByDate={(pending.current ?? snapshot).draftsByDate} onResume={resume} onStart={() => start()}/>}
     </>}
   </main><footer className="site-footer">Made for reflection. Kept in this browser.</footer></div>;
 }

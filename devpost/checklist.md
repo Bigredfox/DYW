@@ -11,13 +11,13 @@ Build mode: fast
 
 Slice 1 passed all eight Vitest storage checks and the production build. The learner ran the app from a regular terminal, completed draft reload/resume, review correction, save/readback, and approved the early checkpoint. Saved-log editing was requested and clarified as already planned in slice 3. Agent browser inspection remains constrained by the session; do not claim keyboard or reduced-motion browser checks were performed.
 
-Next action: commit slice 1 from a regular terminal. This session has read-only access to `.git`; staging failed with “Unable to create .git/index.lock: Permission denied.” Stage only `.gitignore`, `README.md`, `index.html`, `package.json`, `package-lock.json`, `vite.config.js`, `src`, and `devpost/checklist.md`. Then commit with `Add persistent guided daily logging`, tick slice 1, and proceed to slice 2.
+Slice 1 is committed as `f96d2c9`. Slice 2 is implemented; all 13 tests and the production build pass. The learner's dev server initially served the app (HTTP 200) but stopped before module inspection. Headless Chrome remains unusable for interaction checks in this session. Next: learner browser check of catch-up, past-date draft reload/resume, and week/day retrieval, then commit slice 2 from the regular terminal. This session has read-only access to `.git`; staging is denied. Do not proceed to slice 3 before the slice 2 checkpoint is committed. Empty-state, keyboard, and reduced-motion interaction checks remain for final review.
 
 Direct Node checks passed for draft reload, completed save/readback, snapshot immutability, refusal of unconfirmed replacement, failed-write protection, malformed-data rejection, and basic calendar validity. Text and action contrast checks passed (5.47:1 or higher for tested pairs). These checks do not replace the pending framework build, full test suite, or browser verification.
 
 ## Slices
 
-- [ ] **1. Complete a guided log and reopen the saved answers**
+- [x] **1. Complete a guided log and reopen the saved answers**
   Becomes usable: A calm home screen leads through today's six prompts, editable review, durable save, a warm completion, and a view of the saved day. Unfinished answers survive reload.
   Why now: Proves the unique guided-writing kernel and browser persistence together, including the risk that a failed write could lose answers or falsely report success.
   PRD ref: `prd.md > The Core Journey` (steps 1–6), `Six Guided Prompts`, `Review and Save`, `Keep and Resume Drafts`, `States and Boundaries`.

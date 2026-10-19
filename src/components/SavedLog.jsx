@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { prompts } from '../config.js';
 import { formatDay } from '../lib/calendar.js';
-export default function SavedLog({ entry, onEdit, onRestart }) {
+export default function SavedLog({ entry, onEdit, onRestart, onDelete }) {
   const [open, setOpen] = useState(false);
   const trigger = useRef(null);
   const menu = useRef(null);
@@ -16,5 +16,5 @@ export default function SavedLog({ entry, onEdit, onRestart }) {
       items[index].focus();
     }
   }
-  return <section className="card saved-card"><div className="saved-actions" onKeyDown={keyboard} onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false); }}><button ref={trigger} className="more-button" aria-label="Saved log actions" aria-haspopup="menu" aria-expanded={open} aria-controls="saved-actions-menu" onClick={() => setOpen(!open)} onKeyDown={event => { if (!open && event.key === 'ArrowDown') { event.preventDefault(); setOpen(true); } }}>⋯</button>{open && <div ref={menu} id="saved-actions-menu" className="nav-popover" role="menu" aria-label="Saved log actions"><button role="menuitem" onClick={onEdit}>Edit</button><button role="menuitem" onClick={onRestart}>Start Over</button></div>}</div><p className="eyebrow">A day to remember</p><h1>{formatDay(entry.date)}</h1><p className="hint">Your saved reflection</p><dl className="saved-answers">{prompts.map((prompt, i) => <div key={prompt.label}><dt><span className="number">{i + 1}.</span> {prompt.label}</dt><dd className={entry.answers[i] ? '' : 'blank'}>{entry.answers[i] || 'No answer'}</dd></div>)}</dl></section>;
+  return <section className="card saved-card"><div className="saved-actions" onKeyDown={keyboard} onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false); }}><button ref={trigger} className="more-button" aria-label="Saved log actions" aria-haspopup="menu" aria-expanded={open} aria-controls="saved-actions-menu" onClick={() => setOpen(!open)} onKeyDown={event => { if (!open && event.key === 'ArrowDown') { event.preventDefault(); setOpen(true); } }}>⋯</button>{open && <div ref={menu} id="saved-actions-menu" className="nav-popover" role="menu" aria-label="Saved log actions"><button role="menuitem" onClick={onEdit}>Edit</button><button role="menuitem" onClick={onRestart}>Start Over</button><button className="danger" role="menuitem" onClick={() => { setOpen(false); trigger.current.focus(); onDelete(); }}>Delete saved log</button></div>}</div><p className="eyebrow">A day to remember</p><h1>{formatDay(entry.date)}</h1><p className="hint">Your saved reflection</p><dl className="saved-answers">{prompts.map((prompt, i) => <div key={prompt.label}><dt><span className="number">{i + 1}.</span> {prompt.label}</dt><dd className={entry.answers[i] ? '' : 'blank'}>{entry.answers[i] || 'No answer'}</dd></div>)}</dl></section>;
 }

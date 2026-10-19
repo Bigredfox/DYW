@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
+import DiscardDialog from './components/DiscardDialog.jsx';
+import ThemeControl from './components/ThemeControl.jsx';
 import Home from './components/Home.jsx';
 import GuidedEntry from './components/GuidedEntry.jsx';
 import Review from './components/Review.jsx';
@@ -9,7 +11,7 @@ import LogsBrowser from './components/LogsBrowser.jsx';
 import DraftsBrowser from './components/DraftsBrowser.jsx';
 import OverwriteDialog from './components/OverwriteDialog.jsx';
 import { localToday, formatDay, canLogDate } from './lib/calendar.js';
-import { loadSnapshot, newDraft, withDraft, writeSnapshot, saveDraft, prepareReplacement } from './lib/storage.js';
+import { loadSnapshot, newDraft, withDraft, writeSnapshot, saveDraft, prepareReplacement, removeEntry } from './lib/storage.js';
 
 export default function App() {
   const [snapshot, setSnapshot] = useState(null);
@@ -20,6 +22,7 @@ export default function App() {
   const [savedDate, setSavedDate] = useState(null);
   const [profileOpen, setProfileOpen] = useState(false);
   const [overwriteOpen, setOverwriteOpen] = useState(false);
+  const [discardAction, setDiscardAction] = useState(null);
   const [notice, setNotice] = useState('');
   const pending = useRef(null);
   const main = useRef(null);
@@ -29,6 +32,18 @@ export default function App() {
     catch (error) { setLoadError(`We couldn’t open your local logs. ${error.message} Nothing has been reset.`); }
   }
   useEffect(load, []);
+  useEffect(() => {
+    // Keep keyboard actions immediate, even when they open a new view.
+    const keyboard = () => { document.documentElement.dataset.input = 'keyboard'; };
+    const pointer = () => { document.documentElement.dataset.input = 'pointer'; };
+    window.addEventListener('keydown', keyboard, true);
+    window.addEventListener('pointerdown', pointer, true);
+    return () => {
+      window.removeEventListener('keydown', keyboard, true);
+      window.removeEventListener('pointerdown', pointer, true);
+      delete document.documentElement.dataset.input;
+    };
+  }, []);
   useEffect(() => { if (screen !== 'prompt') main.current?.focus(); }, [screen]);
   function persistDraft(nextDraft) {
     setDraft(nextDraft);
@@ -79,7 +94,22 @@ export default function App() {
     }
     setScreen(prepared.draft.stage);
   }
-  return <div className="app"><header className="site-header"><button className="brand" onClick={home}><span className="brand-mark" aria-hidden="true">◒</span> Daily Work Log</button><div className="header-right"><span className="header-note">A moment for yourself</span>{snapshot && <div className="profile-nav" onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget)) setProfileOpen(false); }} onKeyDown={event => { if (event.key === 'Escape') { setProfileOpen(false); event.currentTarget.querySelector('button').focus(); } }}><button className="secondary" aria-expanded={profileOpen} aria-controls="profile-links" onClick={() => setProfileOpen(!profileOpen)}>Profile <span aria-hidden="true">⌄</span></button>{profileOpen && <nav id="profile-links" aria-label="Profile" className="nav-popover"><button onClick={() => navigate('logs')}>Logs</button><button onClick={() => navigate('drafts')}>Drafts</button></nav>}</div>}</div></header><main ref={main} tabIndex="-1">
+  function requestDiscard(date, kind) {
+    setDiscardAction({ date, kind, hasSaved: Boolean(snapshot.savedByDate[date]) });
+  }
+  function confirmDiscard() {
+    const { date, kind } = discardAction;
+    const next = removeEntry(window.localStorage, pending.current ?? snapshot, date, kind, true);
+    setSnapshot(next); pending.current = null; setWriteError(''); setDiscardAction(null);
+    setNotice(kind === 'saved' ? 'Saved log deleted. Any unfinished draft is still available in Drafts.' : 'Unfinished work discarded. Any saved log is unchanged.');
+    if (kind === 'saved') { setSavedDate(null); setScreen('logs'); }
+    else if (draft?.date === date) {
+      setDraft(null);
+      if (next.savedByDate[date]) { setSavedDate(date); setScreen('saved'); }
+      else setScreen('drafts');
+    } else main.current?.focus();
+  }
+  return <div className="app"><header className="site-header"><button className="brand" onClick={home}><span className="brand-mark" aria-hidden="true">◒</span> Daily Work Log</button><div className="header-right"><ThemeControl/><span className="header-note">A moment for yourself</span>{snapshot && <div className="profile-nav" onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget)) setProfileOpen(false); }} onKeyDown={event => { if (event.key === 'Escape') { setProfileOpen(false); event.currentTarget.querySelector('button').focus(); } }}><button className="secondary" aria-expanded={profileOpen} aria-controls="profile-links" onClick={() => setProfileOpen(!profileOpen)}>Profile <span aria-hidden="true">⌄</span></button>{profileOpen && <nav id="profile-links" aria-label="Profile" className="nav-popover"><button onClick={() => navigate('logs')}>Logs</button><button onClick={() => navigate('drafts')}>Drafts</button></nav>}</div>}</div></header><main ref={main} tabIndex="-1">
     {loadError ? <section className="card" role="alert"><h1>Let’s keep your work safe.</h1><p>{loadError}</p><button className="primary" onClick={load}>Retry opening logs</button></section> : !snapshot ? <p role="status">Opening your space…</p> : <>
       {screen !== 'home' && <button className="back-link" onClick={home}>← Home</button>}
       {writeError && <div className="error-banner" role="alert"><p>{writeError}</p>{pending.current && <button className="secondary" onClick={retry}>Retry draft storage</button>}</div>}
@@ -88,10 +118,12 @@ export default function App() {
       {screen === 'date' && <DatePicker today={today} onStart={start}/>}
       {screen === 'prompt' && draft && <GuidedEntry draft={draft} onChange={change} onAdvance={advance}/>}
       {screen === 'review' && draft && <Review draft={draft} onChange={change} onSave={() => save()}/>}
+      {draft && ['prompt', 'review'].includes(screen) && <button className="text-button danger discard-current" onClick={() => requestDiscard(draft.date, 'draft')}>{snapshot.savedByDate[draft.date] ? 'Discard changes' : 'Discard draft'}</button>}
       {screen === 'complete' && <Completion date={savedDate} today={today} onHome={home} onView={() => setScreen('saved')}/>}
-      {screen === 'saved' && snapshot.savedByDate[savedDate] && <SavedLog entry={snapshot.savedByDate[savedDate]} onEdit={() => replace('edit')} onRestart={() => replace('restart')}/>}
+      {screen === 'saved' && snapshot.savedByDate[savedDate] && <SavedLog entry={snapshot.savedByDate[savedDate]} onEdit={() => replace('edit')} onRestart={() => replace('restart')} onDelete={() => requestDiscard(savedDate, 'saved')}/>}
       {screen === 'logs' && <LogsBrowser snapshot={snapshot} onOpen={openSaved} onStart={() => start()}/>}
-      {screen === 'drafts' && <DraftsBrowser draftsByDate={(pending.current ?? snapshot).draftsByDate} onResume={resume} onStart={() => start()}/>}
+      {screen === 'drafts' && <DraftsBrowser draftsByDate={(pending.current ?? snapshot).draftsByDate} onResume={resume} onDiscard={date => requestDiscard(date, 'draft')} savedByDate={snapshot.savedByDate} onStart={() => start()}/>}
+      {discardAction && <DiscardDialog action={discardAction} onCancel={() => setDiscardAction(null)} onConfirm={confirmDiscard}/>}
       {overwriteOpen && draft && <OverwriteDialog date={draft.date} onCancel={() => setOverwriteOpen(false)} onConfirm={() => save(true)}/>}
     </>}
   </main><footer className="site-footer">Made for reflection. Kept in this browser.</footer></div>;

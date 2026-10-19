@@ -18,6 +18,18 @@ npm.cmd test -- --run
 npm.cmd run build
 ```
 
+## Development feedback
+
+Agentation appears only when running the development server. Open its bottom-right toolbar, select an element, and add a note. It connects to the local annotation server at `http://localhost:4747`.
+
+Codex's user MCP settings register `agentation` with `npx.cmd -y agentation-mcp server`. Reconnect or restart Codex to load newly configured MCP tools. Keep that agent session running while annotating. For a standalone test server, run:
+
+```powershell
+npx.cmd --yes agentation-mcp server
+```
+
+Check service health with `npx.cmd --yes agentation-mcp doctor`. Health alone does not verify browser feedback delivery: add a note with the exact text `Agentation live test`, then ask the agent to read `agentation_get_all_pending` and confirm that comment and page URL. Initial setup reported unavailable SQLite bindings, so annotations currently remain in memory and can be lost when the server stops; work logs retain their separate localStorage persistence.
+
 ## Your data
 
 Logs and unfinished drafts stay in this browser's localStorage, under `daily-work-log:v1`. Use the same browser profile and address when returning. Clearing site data removes them; they do not sync across devices. Use one active tab. No account, API keys, or external log service is involved.

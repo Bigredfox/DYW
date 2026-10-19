@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { STORAGE_KEY, emptySnapshot, loadSnapshot, newDraft, withDraft, writeSnapshot, saveDraft, prepareReplacement } from './storage.js';
+import { STORAGE_KEY, emptySnapshot, loadSnapshot, newDraft, withDraft, writeSnapshot, saveDraft, prepareReplacement, removeEntry } from './storage.js';
 
 function memoryStorage() {
   const values = new Map();
@@ -103,4 +103,68 @@ describe('durable logging', () => {
     expect(after.draftsByDate[unrelated.date]).toEqual(unrelated);
     expect(after.firstUseMonday).toBe('2026-09-28');
   });
+});
+
+describe('confirmed removal', () => {
+  function fixture() {
+    const storage = memoryStorage();
+    let snapshot = saveDraft(storage, emptySnapshot('2026-10-04'), newDraft('2026-10-02', ['saved', '', '', '', '', '']));
+    snapshot = saveDraft(storage, snapshot, newDraft('2026-10-01'));
+    snapshot = withDraft(snapshot, newDraft('2026-10-02', ['edits', '', '', '', '', ''], 'edit'));
+    snapshot = withDraft(snapshot, newDraft('2026-10-03', ['unfinished', '', '', '', '', '']));
+    writeSnapshot(storage, snapshot);
+    return { storage, snapshot };
+  }
+  it.each(['draft', 'saved'])('refuses unconfirmed %s removal and keeps durable data', kind => {
+    const { storage, snapshot } = fixture();
+    const raw = storage.getItem(STORAGE_KEY);
+    expect(() => removeEntry(storage, snapshot, '2026-10-02', kind)).toThrow('Confirm');
+    expect(storage.getItem(STORAGE_KEY)).toBe(raw);
+  });
+  it.each(['draft', 'saved'])('removes only the confirmed %s and preserves other work after reload', kind => {
+    const { storage, snapshot } = fixture();
+    const after = removeEntry(storage, snapshot, '2026-10-02', kind, true);
+    const field = kind === 'saved' ? 'savedByDate' : 'draftsByDate';
+    const otherField = kind === 'saved' ? 'draftsByDate' : 'savedByDate';
+    expect(after[field]['2026-10-02']).toBeUndefined();
+    expect(after[otherField]).toEqual(snapshot[otherField]);
+    expect(after.savedByDate['2026-10-01']).toEqual(snapshot.savedByDate['2026-10-01']);
+    expect(after.draftsByDate['2026-10-03']).toEqual(snapshot.draftsByDate['2026-10-03']);
+    expect(after.firstUseMonday).toBe(snapshot.firstUseMonday);
+    expect(snapshot[field]['2026-10-02']).toBeDefined();
+    expect(loadSnapshot(storage, '2026-10-04')).toEqual(after);
+  });
+  it('discards a new unfinished day without affecting history', () => {
+    const { storage, snapshot } = fixture();
+    const after = removeEntry(storage, snapshot, '2026-10-03', 'draft', true);
+    expect(after.draftsByDate['2026-10-03']).toBeUndefined();
+    expect(after.savedByDate).toEqual(snapshot.savedByDate);
+  });
+  it.each(['draft', 'saved'])('preserves data on failed %s removal and permits retry', kind => {
+    const { storage, snapshot } = fixture();
+    const raw = storage.getItem(STORAGE_KEY);
+    const originalWrite = storage.setItem;
+    storage.setItem = () => { throw new Error('Unavailable'); };
+    expect(() => removeEntry(storage, snapshot, '2026-10-02', kind, true)).toThrow('Unavailable');
+    expect(storage.getItem(STORAGE_KEY)).toBe(raw);
+    expect(snapshot.draftsByDate['2026-10-02'].answers[0]).toBe('edits');
+    expect(snapshot.savedByDate['2026-10-02'].answers[0]).toBe('saved');
+    storage.setItem = originalWrite;
+    expect(() => removeEntry(storage, snapshot, '2026-10-02', kind, true)).not.toThrow();
+  });
+});
+
+it('retains unrelated pending answers when another entry is removed', () => {
+  const storage = memoryStorage();
+  const saved = saveDraft(storage, emptySnapshot('2026-10-04'), newDraft('2026-10-02'));
+  const pending = withDraft(saved, newDraft('2026-10-03', ['only in this tab', '', '', '', '', '']));
+  const raw = storage.getItem(STORAGE_KEY);
+  const write = storage.setItem;
+  storage.setItem = () => { throw new Error('Unavailable'); };
+  expect(() => removeEntry(storage, pending, '2026-10-02', 'saved', true)).toThrow();
+  expect(storage.getItem(STORAGE_KEY)).toBe(raw);
+  expect(pending.draftsByDate['2026-10-03'].answers[0]).toBe('only in this tab');
+  storage.setItem = write;
+  removeEntry(storage, pending, '2026-10-02', 'saved', true);
+  expect(loadSnapshot(storage, '2026-10-04').draftsByDate['2026-10-03'].answers[0]).toBe('only in this tab');
 });

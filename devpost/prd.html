@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Daily Work Log — PRD Review</title>
+<style>
+:root{--bg:#eef3ef;--paper:#fcfdf9;--ink:#23392f;--muted:#53685d;--line:#ccdacf;--accent:#38634d;--wash:#e2ece5;--gold:#f6edda}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 "Segoe UI",system-ui,sans-serif}header,main,footer{max-width:1060px;margin:auto;padding:24px}header{padding-top:64px;padding-bottom:32px}.eyebrow{font-size:12px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}h1{font-family:Georgia,serif;font-weight:400;font-size:clamp(38px,6vw,64px);line-height:1.1;margin:16px 0}h2{font:400 29px/1.25 Georgia,serif;margin:0 0 16px}h3{margin:0 0 8px;font-size:18px}p{margin:8px 0 16px}.lede{max-width:690px;font-size:19px;color:var(--muted)}.badge{display:inline-block;border:1px solid var(--line);border-radius:30px;padding:4px 12px;background:var(--paper)}section{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:28px;margin-bottom:24px}.small{color:var(--muted);font-size:14px}.diagram{overflow:auto}.diagram svg{display:block;min-width:680px;width:100%;height:auto}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.card{background:var(--wash);border-radius:14px;padding:20px}.callout{background:var(--gold);border-left:4px solid #a5803a;padding:16px 20px;border-radius:8px}details{border:1px solid var(--line);border-radius:12px;margin:12px 0;overflow:hidden}summary{cursor:pointer;padding:16px;font-weight:600;background:#f3f6f1}details>div{padding:4px 20px 20px}ul,ol{padding-left:24px}li{margin:7px 0}a{color:var(--accent)}.criteria li::marker{color:var(--accent)}.source{font-size:13px;color:var(--muted)}footer{padding-bottom:48px}.route{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:18px 0}.route span{border:1px solid var(--line);padding:6px 12px;border-radius:8px}.route b{color:var(--muted)}@media(max-width:650px){.grid{grid-template-columns:1fr}section{padding:20px}header,main,footer{padding-left:16px;padding-right:16px}header{padding-top:36px}}@media print{body{background:white}section{break-inside:avoid}details>div{display:block!important}summary{background:white}}
+</style>
+</head>
+<body>
+<header>
+<div class="eyebrow">Build with AI Basics · Stage 3</div>
+<h1>A little reflection.<br>A trail you can return to.</h1>
+<p class="lede">Daily Work Log helps Mikey capture his own project work after the day ends, then find it again before a semester performance review.</p>
+<span class="badge">PRD · Approved</span>
+<p class="small">This is an interactive planning companion, not the app. The calm green styling illustrates a possible mood; the application's exact palette is still open. <a href="prd.md">Read the canonical Markdown PRD</a>.</p>
+</header>
+<main>
+<section>
+<h2>The complete journey</h2>
+<p>The scope said “six prompts, save, look back.” Now the flow includes an explicit Done button, smooth acknowledgments, review before saving, and protected replacement of an existing daily log.</p>
+<div class="diagram">
+<svg viewBox="0 0 940 230" role="img" aria-labelledby="journey-title journey-desc" xmlns="http://www.w3.org/2000/svg">
+<title id="journey-title">Daily work log journey</title><desc id="journey-desc">Welcome leads to six prompts, review, save, and thanks. Saving a replacement requires confirmation. Later, Profile and Logs lead to a week and a saved day.</desc>
+<defs><marker id="arrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7" fill="#38634d"/></marker></defs>
+<g fill="#e2ece5" stroke="#a5bead"><rect x="5" y="15" width="155" height="65" rx="12"/><rect x="195" y="15" width="155" height="65" rx="12"/><rect x="385" y="15" width="155" height="65" rx="12"/><rect x="575" y="15" width="155" height="65" rx="12"/><rect x="765" y="15" width="165" height="65" rx="12"/></g>
+<g fill="#23392f" font-family="Segoe UI, sans-serif" font-size="16" text-anchor="middle"><text x="82" y="53">Welcome</text><text x="272" y="45">Six prompts</text><text x="272" y="65" font-size="12">Answer → Done → fade</text><text x="462" y="45">Review</text><text x="462" y="65" font-size="12">Change answers</text><text x="652" y="53">Save</text><text x="847" y="53">Warm thank-you</text></g>
+<g stroke="#38634d" stroke-width="2" marker-end="url(#arrow)"><path d="M160 48H190"/><path d="M350 48H380"/><path d="M540 48H570"/><path d="M730 48H760"/></g>
+<path d="M652 80V103" stroke="#a5803a" stroke-width="2"/>
+<rect x="500" y="105" width="305" height="40" rx="10" fill="#f6edda" stroke="#d5bc87"/><text x="652" y="130" text-anchor="middle" fill="#57462a" font-size="13" font-family="Segoe UI, sans-serif">Replacing a log? Confirm before overwrite.</text>
+<rect x="5" y="175" width="925" height="45" rx="12" fill="#f3f6f1" stroke="#ccdacf"/><text x="467" y="203" text-anchor="middle" fill="#23392f" font-size="16" font-family="Segoe UI, sans-serif">Later: Profile → Logs → Week → Saved day → Read six answers</text>
+</svg>
+</div>
+</section>
+<section>
+<h2>Explore each part</h2>
+<p class="small">Open a step to review its behavior, relevant states, and what would prove it works. All content is available offline.</p>
+<details open><summary>01 · Welcome and start</summary><div>
+<p>A personal greeting such as “Hi, Michael,” calm visuals, and a gentle invitation into today's log. Short instructions such as “Let's jump into what you did today” introduce the first prompt.</p>
+<p><strong>Catch up on a past day:</strong> New entries default to today, but you can choose a past date before answering. The selected date stays visible during entry and review, and instructions refer to that day. Monday's entry written on Friday belongs to Monday and its week, not Friday. Drafts retain the selected date. An existing entry for that date is protected by the usual overwrite confirmation.</p>
+<p><strong>First use:</strong> How the display name is supplied remains open. There is no account system.</p>
+<ul class="criteria"><li>The home screen greets the user and offers entry into today's log.</li><li>Brief instructions lead into the first prompt.</li><li>New entries default to today and allow selecting a past date.</li><li>The selected date is visible during entry and review and retained by drafts.</li><li>Monday's work entered on Friday is saved under Monday, with confirmation if Monday already has an entry.</li></ul>
+<p class="source">Source: scope.md → The Core Loop; Inspiration &amp; Identity.</p>
+</div></details>
+<details><summary>02 · Answer six prompts, one at a time</summary><div>
+<ol><li>What you did</li><li>Skills learned</li><li>Obstacles faced</li><li>How you overcame them</li><li>Resources used</li><li>People you spoke to</li></ol>
+<p>Type an answer or use laptop speech-to-text, then click <strong>Done</strong>. A brief acknowledgment, such as a thumbs-up, accompanies a smooth fade into the next prompt. Typing alone does not advance.</p>
+<p><strong>Blank answers:</strong> Allowed on all six prompts. “None” is also fine; the app does not invent content for a blank.</p>
+<ul class="criteria"><li>Topics appear individually in this order.</li><li>Done advances after a filled or blank answer, with acknowledgment and fade.</li><li>The sixth Done opens review rather than saving immediately.</li></ul>
+<p class="source">Source: scope.md → The Unique Kernel; Inspiration &amp; Identity.</p>
+</div></details>
+<details><summary>03 · Review, correct, and save</summary><div>
+<p>See all six answers together, including blanks. Change any answer before clicking <strong>Save</strong>. Successful saving makes the entry available in history and shows a warm thank-you with encouragement to return tomorrow.</p>
+<p><strong>Persistence:</strong> Saved entries must survive closing and reopening the app so look-back serves the scope's purpose.</p>
+<p class="callout"><strong>If saving fails:</strong> Keep the entered answers, show a brief error explaining that saving failed, and offer a retry. Do not show success or change an existing saved log.</p>
+<ul class="criteria"><li>Review shows all six prompt-answer pairs.</li><li>Corrections appear in the saved entry.</li><li>The entry appears under its week and day and remains after reopening.</li><li>The thank-you follows successful saving.</li><li>A failed save retains answers, shows a brief error and retry, and leaves existing saved work unchanged.</li></ul>
+<p class="source">Source: scope.md → The Core Loop; What “Working” Looks Like; Why This Matters to the Learner.</p>
+</div></details>
+<details><summary>04 · Edit or start over safely</summary><div>
+<p>When viewing any saved log, including a past day, open the <strong>three-dot menu at the top-right</strong>. It offers exactly <strong>Edit</strong> and <strong>Start Over</strong>. The proposed Discard option was removed.</p>
+<div class="grid"><div class="card"><h3>Edit</h3><p>Start from saved answers and change them. Both actions also apply to past days and retain the original date of the selected log.</p></div><div class="card"><h3>Start over</h3><p>Start from blank answers. Keep the existing saved log until its replacement is confirmed and saved.</p></div></div>
+<p><strong>One entry per day:</strong> Saving a replacement asks for overwrite confirmation. Canceling confirmation or leaving before saving preserves the old log.</p>
+<ul class="criteria"><li>Every saved log has a top-right three-dot menu offering only Edit and Start Over.</li><li>Starting over does not erase saved work.</li><li>Replacement requires confirmation at Save.</li><li>Cancel preserves the original; successful confirmed replacement leaves one daily entry.</li><li>Editing begins with saved answers.</li></ul>
+<p class="source">Source: scope.md → The POC Boundary; clarified in the stage 3 interview.</p>
+</div></details>
+<details><summary>05 · Return through Profile → Logs → week → day</summary><div>
+<div class="route"><span>Profile</span><b>→</b><span>Logs</span><b>→</b><span>Choose week</span><b>→</b><span>Choose saved day</span></div>
+<p>Group saved logs by week. If a week has entries for Monday, Wednesday, and Friday, show those three days. Each week contains at most seven daily entries. Opening a day shows its six answers.</p>
+<p><strong>Week 1, Week 2, Week 3:</strong> Each week runs Monday through Sunday. Week 1 is the calendar week when you first use the app. Starting on Friday still puts you in Week 1; the following Monday begins Week 2. Numbering advances with calendar weeks, even when a week has no entries. Logs belong to the week of their original log date, not the date they are later edited or saved from a draft.</p>
+<p><strong>No history:</strong> Show <strong>Create a new log</strong> as an action into today's entry.</p>
+<ul class="criteria"><li>Profile includes a Logs item.</li><li>History groups entries by week and displays only saved days.</li><li>First use on Friday falls in Week 1; the next Monday falls in Week 2.</li><li>Numbering follows calendar weeks rather than the number of entries.</li><li>Opening a day shows its saved answers.</li><li>The empty-history action starts today's log.</li></ul>
+<p class="source">Source: scope.md → The Core Loop; What “Working” Looks Like; The POC Boundary.</p>
+</div></details>
+</section>
+<section>
+<h2>Return to unfinished work</h2>
+<div class="route"><span>Profile</span><b>→</b><span>Drafts</span><b>→</b><span>Open unfinished entry</span><b>→</b><span>Continue</span></div>
+<p>Profile offers <strong>Logs</strong> for completed entries and <strong>Drafts</strong> for unfinished entries. Leaving an unfinished entry retains its answers so you can resume later, including after reopening the app. A draft keeps its original log date.</p>
+<details><summary>Draft behavior, protection, and success criteria</summary><div>
+<p>An unfinished edit or replacement remains a draft while the existing saved log stays intact. Completing a draft follows the usual review, Save, and overwrite-confirmation rules. Successful saving puts the entry in Logs and removes that unfinished version from Drafts.</p>
+<ul class="criteria"><li>Profile has separate Logs and Drafts items.</li><li>Unfinished entries remain available after leaving and reopening.</li><li>Resuming retains entered answers and the original log date.</li><li>Unfinished edits or replacements do not change saved logs.</li><li>Successfully saved drafts become completed logs and leave Drafts.</li></ul>
+<p class="source">Source: scope.md → The Core Loop; clarified in the stage 3 interview. This adds draft retention and resumption to the original boundary, without a separate draft-management system.</p>
+</div></details>
+</section>
+<section>
+<h2>The feeling you're aiming for</h2>
+<div class="grid"><div class="card"><h3>A calm arrival</h3><p>Soothing colors, a personal greeting, gentle instructions, and a welcoming mood after a workday. Green and ocean-like colors were references; baby blue was an example, not a final selection.</p></div><div class="card"><h3>A pleasing rhythm</h3><p>One prompt at a time, an explicit Done button, brief acknowledgment, and soft fades. Review gives room for corrections; a warm thank-you closes a saved session.</p></div></div>
+<p class="small">Exact colors, typography, wording, and animation timing can be settled during the technical spec. This companion's visual treatment is illustrative.</p>
+</section>
+<section>
+<h2>Keep the experiment small</h2>
+<div class="grid"><div><h3>Building now</h3><ul><li>Personal welcome, today or a past date, and six guided fields.</li><li>Optional answers, review, corrections, and Save.</li><li>Warm completion and saved history that survives reopening.</li><li>Editing and protected replacement of daily entries.</li><li>Profile → Logs → week → day, including empty history.</li><li>Profile → Drafts to retain and resume unfinished entries.</li><li>Enough history for a short look-back demo; local use is sufficient.</li></ul></div><div><h3>Later, in your ranked order</h3><ol><li>AI weekly summaries/reports.</li><li>In-app speech-to-text.</li><li>Weekly goals, daily goals, and a check-in.</li><li>Contribution heatmap.</li></ol><p class="small">Laptop speech-to-text is already usable without building dictation.</p></div></div>
+<p><strong>Out of this PoC:</strong> Accounts, sharing, extra profile features, teammate reviews, manager dashboards, GitHub/evidence attachments, automatic skill tagging, and a full year of preloaded logs. No AI recap is required to prove the idea.</p>
+<p class="source">Source: scope.md → The POC Boundary; Later; Explicitly Cut.</p>
+</section>
+<section>
+<h2>Decisions you made</h2>
+<ul><li><strong>Personal calm welcome:</strong> logging should feel approachable after work.</li><li><strong>Done button:</strong> signals completion for typing or laptop dictation.</li><li><strong>Acknowledgment and fade:</strong> make moving between prompts pleasant.</li><li><strong>Optional answers:</strong> some topics will not apply every day.</li><li><strong>Review before saving:</strong> leave room to correct answers.</li><li><strong>Notes-like history:</strong> Profile → Logs → week → saved day.</li><li><strong>One daily entry:</strong> at most seven entries per week.</li><li><strong>Catch-up dates:</strong> record past work under the date it happened.</li><li><strong>Week numbering:</strong> Monday–Sunday weeks, starting with Week 1 in the calendar week of first use.</li><li><strong>Edit versus start over:</strong> keep answers for editing; begin blank for replacement.</li><li><strong>Protect saved work:</strong> confirm replacement and retain the old log until saving.</li><li><strong>Empty history:</strong> invite the user to create a new log.</li><li><strong>Profile → Drafts:</strong> keep unfinished entries available to resume.</li></ul>
+</section>
+<section>
+<h2>Product approved · Stage 3 complete</h2>
+<p>The learner approved the complete plan with “Looks good.” The journey and success criteria cover logging, review, safe replacement, drafts, Monday–Sunday numbered weeks, and catch-up entries. Continue with stage 4 to define how the app will be built.</p>
+<p>Draft resumption and past-date selection are your additions to the original scope. Both stay within the same personal logging flow; summaries, accounts, and other deferred features remain outside the PoC.</p>
+<details><summary>Choices that can wait until stage 4</summary><div><ul><li>A fixed display name versus a way to set it, without accounts.</li><li>Exact colors, typography, greeting/thank-you copy, and fade timing.</li><li>How saved entries are preserved locally and how the small demo history is prepared.</li></ul></div></details>
+</section>
+</main>
+<footer><strong>Canonical plan:</strong> <a href="prd.md">devpost/prd.md</a> · <a href="scope.html">Approved scope companion</a><br>Product requirements approved. Next: stage 4, the technical specification, before building.</footer>
+</body>
+</html>

@@ -49,3 +49,13 @@ export function saveDraft(storage, snapshot, draft, confirmed = false) {
   delete draftsByDate[draft.date];
   return writeSnapshot(storage, { ...snapshot, savedByDate: { ...snapshot.savedByDate, [draft.date]: saved }, draftsByDate });
 }
+
+export function removeEntry(storage, snapshot, date, kind, confirmed = false) {
+  if (!confirmed) throw new Error('Confirm removal first.');
+  if (!isValidDate(date) || !['draft', 'saved'].includes(kind)) throw new Error('Choose a valid entry to remove.');
+  const field = kind === 'saved' ? 'savedByDate' : 'draftsByDate';
+  if (!snapshot[field][date]) throw new Error('This entry could not be found.');
+  const entries = { ...snapshot[field] };
+  delete entries[date];
+  return writeSnapshot(storage, { ...snapshot, [field]: entries });
+}

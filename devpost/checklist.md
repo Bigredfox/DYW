@@ -79,3 +79,49 @@ Activity mode: Brief recap with an offline reference map.
 ## Revisions
 
 - Use Vite's runner config loader for dev/build/preview/tests — the default config bundler could not traverse an ancestor directory under this session's filesystem restrictions; the runner passes the build and tests with the chosen stack intact.
+
+## Post-PoC Improvements ? 2026-10-18
+
+User requested dark mode and a discard button. Existing fast build mode carries forward. User approved all three discard behaviors: unfinished drafts, edits while preserving the saved log, and deletion of saved logs. The new slice below records this authorized expansion.
+
+- [x] **4. Choose and remember appearance**
+  Becomes usable: Header appearance control offers System, Light, and Dark across the app.
+  Why now: User selected this deferred improvement.
+  PRD ref: `prd.md > Appearance Preference`.
+  Spec ref: `spec.md > Appearance Preference`.
+  Build: Add isolated preference storage and shared palette variables; follow device changes in System mode. Implemented; user tested and accepted.
+  Verify (mechanical): All 24 storage/calendar tests and the production build pass. Browser visual verification remains pending.
+  Learner check: Try all three appearances, reload, and inspect writing, history, and dialogs.
+  Commit: `Add remembered light and dark appearance` (included in the accepted feature checkpoint).
+
+- [x] **5. Discard drafts, abandon changes, and delete saved logs safely**
+  Becomes usable: Remove an unfinished draft, discard edits while keeping saved answers, or delete a saved log while retaining any draft.
+  Why now: User explicitly requested all three removal behaviors.
+  PRD ref: `prd.md > Discard and Delete`.
+  Spec ref: `spec.md > Confirmed Removal`.
+  Build: Implemented date-specific confirmation with Cancel/Escape, distinct labels and target maps, retryable write failure, and success-only navigation. Draft controls appear in entry/review and Drafts; deletion appears in the saved-log menu.
+  Verify (mechanical): 24 tests pass, including eight new removal cases; production build passes. Browser keyboard/visual verification remains pending.
+  Learner check: Using fictional data, cancel and confirm each action, reload to verify removal, and check that the other kind of record and other days remain intact. Try light/dark appearance on confirmation dialogs.
+  Commit: `Add protected draft discard and saved log deletion` (included in the accepted feature checkpoint).
+
+Post-PoC hands-on review accepted: after starting the app at http://localhost:5173, the user reported ?works well.? Both requested features are accepted. Mechanical verification: all 24 tests and the production build pass. Detailed keyboard and visual checks were not individually reported. Changes remain uncommitted alongside pre-existing working-tree edits; no new commit is claimed.
+
+## Contribution Heatmap Improvement
+
+User requested implementation of the deferred contribution heatmap after accepting dark mode and discard. Continue fast mode. Implement one usable addition to history using saved dates without scoring answer length or introducing external services.
+
+- [x] **6. See and open saved days in a contribution heatmap**
+  Becomes usable: Profile / Logs shows a year calendar of saved days; clicking a filled day opens its reflection.
+  Why now: User selected this deferred feature after accepting the previous improvements.
+  PRD ref: `prd.md > Contribution Heatmap`.
+  Spec ref: `spec.md > Contribution Heatmap`.
+  Build: Implemented pure calendar derivation, current/history year selection, count, legend, empty state, today/future styling, accessible date labels, narrow-screen scrolling, theme support and saved-log navigation. Week browsing remains below the chart.
+  Verify (mechanical): All 30 tests pass, including six new heatmap cases; production build passes. Browser visual, keyboard and click-through checks remain pending.
+  Learner check: Open Profile / Logs, find a filled day and open it. Save a catch-up log and verify its date fills; delete the sample saved log and verify the square clears. Switch appearance and any available historical year; try scrolling the calendar on a narrow window.
+  Commit: `Add saved-log contribution heatmap` (included in the accepted feature checkpoint).
+
+Heatmap review accepted: the learner requested all seven weekday labels, the labels were corrected, and the learner confirmed everything looks good and requested saving the changes. All 30 tests and the production build pass. Detailed browser keyboard checks were not individually reported.
+
+## Accepted Feature Checkpoint
+
+The learner accepted dark mode, all three discard actions, the contribution heatmap and the full weekday labels, then requested a Git save. Save the app changes, development feedback integration, visual polish and project documentation together. Local skill installations and agent configuration are outside this app checkpoint; the ignored learner profile and credentials remain excluded.

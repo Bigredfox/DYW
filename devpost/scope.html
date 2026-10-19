@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Daily Work Log — Scope</title>
+  <style>
+    :root {
+      --bg: #f4efe6;
+      --paper: #fffaf3;
+      --ink: #1c1916;
+      --muted: #5c564e;
+      --line: #e4d9c8;
+      --now: #1f6b4a;
+      --later: #8a5a12;
+      --cut: #8b3a32;
+      --accent: #2c5f8a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.55;
+    }
+    header {
+      padding: 2.5rem 1.5rem 1.5rem;
+      max-width: 52rem;
+      margin: 0 auto;
+    }
+    header p.kicker {
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin: 0 0 0.5rem;
+    }
+    h1 { font-size: 2.1rem; margin: 0 0 0.6rem; }
+    .lede { font-size: 1.15rem; color: var(--muted); margin: 0; }
+    main { max-width: 52rem; margin: 0 auto; padding: 0 1.5rem 4rem; }
+    section {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 1.25rem 1.4rem;
+      margin: 1rem 0;
+    }
+    h2 { margin: 0 0 0.75rem; font-size: 1.15rem; }
+    .diagram {
+      width: 100%;
+      overflow-x: auto;
+    }
+    .diagram svg { display: block; width: 100%; height: auto; }
+    .six {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+      gap: 0.5rem;
+      margin: 0.75rem 0 0;
+    }
+    .six span {
+      background: #eef5f1;
+      border: 1px solid #cfe0d6;
+      border-radius: 999px;
+      padding: 0.35rem 0.7rem;
+      font-size: 0.85rem;
+      text-align: center;
+    }
+    details {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      margin: 0.5rem 0;
+      background: #fff;
+    }
+    details[open] { border-color: #d8cbb6; }
+    summary {
+      cursor: pointer;
+      padding: 0.75rem 1rem;
+      font-weight: 600;
+      list-style: none;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::before {
+      content: "";
+      display: inline-block;
+      width: 0.55rem;
+      height: 0.55rem;
+      border-radius: 50%;
+      margin-right: 0.55rem;
+      vertical-align: middle;
+    }
+    .now summary::before { background: var(--now); }
+    .later summary::before { background: var(--later); }
+    .cut summary::before { background: var(--cut); }
+    details > div { padding: 0 1rem 1rem 1.9rem; color: var(--muted); }
+    ol, ul { margin: 0.4rem 0 0; padding-left: 1.2rem; }
+    li { margin: 0.35rem 0; }
+    .note { font-size: 0.9rem; color: var(--muted); }
+    footer { max-width: 52rem; margin: 0 auto; padding: 0 1.5rem 2rem; color: var(--muted); font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <p class="kicker">Scope · proof of concept · approved</p>
+    <h1>Daily Work Log</h1>
+    <p class="lede">A structured daily log so you can open a past week or day and see what you actually did—not reconstruct a semester from memory.</p>
+  </header>
+  <main>
+    <section>
+      <h2>User, loop, and proof</h2>
+      <p class="note">Mikey logs his own CS project work. The demo lands when he can open a week and a weekday and read the six answers.</p>
+      <div class="diagram" role="img" aria-label="Mikey opens the app, logs six prompts, saves, then looks back at a week and a day to walk into a performance review with a trail.">
+        <svg viewBox="0 0 720 220" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+              <path d="M0,0 L8,4 L0,8 Z" fill="#2c5f8a"/>
+            </marker>
+          </defs>
+          <rect x="8" y="58" width="150" height="72" rx="12" fill="#e8f1f8" stroke="#2c5f8a"/>
+          <text x="83" y="88" text-anchor="middle" font-size="13" font-family="Segoe UI, sans-serif" fill="#1c1916">Mikey</text>
+          <text x="83" y="108" text-anchor="middle" font-size="11" font-family="Segoe UI, sans-serif" fill="#5c564e">his own work</text>
+          <line x1="158" y1="94" x2="198" y2="94" stroke="#2c5f8a" stroke-width="2" marker-end="url(#arrow)"/>
+          <rect x="206" y="40" width="250" height="108" rx="12" fill="#eef5f1" stroke="#1f6b4a"/>
+          <text x="331" y="68" text-anchor="middle" font-size="13" font-family="Segoe UI, sans-serif" fill="#1c1916">Core loop</text>
+          <text x="331" y="90" text-anchor="middle" font-size="11" font-family="Segoe UI, sans-serif" fill="#5c564e">home → six prompts → save</text>
+          <text x="331" y="110" text-anchor="middle" font-size="11" font-family="Segoe UI, sans-serif" fill="#5c564e">come back all semester</text>
+          <line x1="456" y1="94" x2="496" y2="94" stroke="#2c5f8a" stroke-width="2" marker-end="url(#arrow)"/>
+          <rect x="504" y="40" width="208" height="108" rx="12" fill="#f8f0e4" stroke="#8a5a12"/>
+          <text x="608" y="68" text-anchor="middle" font-size="13" font-family="Segoe UI, sans-serif" fill="#1c1916">Proof</text>
+          <text x="608" y="90" text-anchor="middle" font-size="11" font-family="Segoe UI, sans-serif" fill="#5c564e">open week 20</text>
+          <text x="608" y="110" text-anchor="middle" font-size="11" font-family="Segoe UI, sans-serif" fill="#5c564e">see Wednesday’s log</text>
+          <text x="360" y="200" text-anchor="middle" font-size="12" font-family="Segoe UI, sans-serif" fill="#5c564e">Trail in hand for the performance review — no blank, no scramble</text>
+        </svg>
+      </div>
+    </section>
+
+    <section>
+      <h2>The kernel</h2>
+      <p>Not a blank notes page. Six prompts, one after another. Structure makes it easier to write; a dedicated app is less boring than a Notion table you forget to open.</p>
+      <div class="six">
+        <span>1. What you did</span>
+        <span>2. Skills learned</span>
+        <span>3. Obstacles</span>
+        <span>4. How you overcame them</span>
+        <span>5. Resources</span>
+        <span>6. People you spoke to</span>
+      </div>
+    </section>
+
+    <section>
+      <h2>Who and why</h2>
+      <p>Mikey, CS senior and team lead this semester. Long project, lots of tasks, review with a faculty coach: “I know I did it, but what did I do?” Today that’s memory (or notes that never get filled in). This experiment is <strong>his</strong> log, not a tool for reviewing teammates.</p>
+    </section>
+
+    <section>
+      <h2>Now, later, cut</h2>
+      <p class="note">Open a row to see what’s in the proof of concept, what’s parked, and what was named as out.</p>
+
+      <details class="now" open>
+        <summary>Now — in the proof of concept</summary>
+        <div>
+          <ul>
+            <li>Friendly home screen and an inviting way into today’s log</li>
+            <li>Six guided prompts, one at a time, then save</li>
+            <li>Look back by week and by day in a simple list or table</li>
+            <li>Enough saved days to demo look-back — not a seeded full year</li>
+            <li>Local app is enough; deployment is optional</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="later">
+        <summary>Later — worth doing, ranked</summary>
+        <div>
+          <ol>
+            <li>AI weekly summary/report (vision also includes a daily recap, set-out vs. accomplished, improvement suggestions)</li>
+            <li>In-app speech-to-text</li>
+            <li>Weekly goals broken into daily goals, with an end-of-week check-in</li>
+            <li>GitHub-style contribution heatmap</li>
+          </ol>
+          <p>Laptop OS speech-to-text can be used during the PoC without building it.</p>
+        </div>
+      </details>
+
+      <details class="cut">
+        <summary>Cut — named, with a reason</summary>
+        <div>
+          <ul>
+            <li><strong>Reviewing teammates / manager dashboard</strong> — different product; he chose the self-log.</li>
+            <li><strong>GitHub commits, issues, screenshots as evidence</strong> — kernel is structured answers, not an evidence locker.</li>
+            <li><strong>AI skill tagging</strong> — skills are a field you fill in, not something the app infers.</li>
+            <li><strong>Accounts, share links, internships as first audience</strong> — later product.</li>
+            <li><strong>A full year of preloaded logs</strong> — vision is 52 weeks; the PoC only needs enough days to open a week and a day.</li>
+          </ul>
+        </div>
+      </details>
+    </section>
+  </main>
+  <footer>
+    Canonical plan: <code>devpost/scope.md</code>. This page is a review companion only.
+  </footer>
+</body>
+</html>

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import StreakSummary from './StreakSummary.jsx';
 import { formatDay, localToday } from '../lib/calendar.js';
 import { buildHeatmap, heatmapYears } from '../lib/heatmap.js';
 
@@ -10,6 +11,7 @@ export default function ContributionHeatmap({ savedByDate, onOpen }) {
   const years = [...new Set([year, ...heatmapYears(savedByDate, today)])].sort((a, b) => b - a);
   const { weeks, savedDays } = buildHeatmap(savedByDate, year, today);
   return <section className="heatmap" aria-labelledby="heatmap-title">
+    <StreakSummary savedByDate={savedByDate} today={today}/>
     <div className="heatmap-heading"><div><h2 id="heatmap-title">Your year in reflections</h2><p className="small" role="status">{savedDays} saved {savedDays === 1 ? 'day' : 'days'} in {year}</p></div><label className="heatmap-year">Year<select value={year} onChange={event => setYear(Number(event.target.value))}>{years.map(value => <option key={value} value={value}>{value}</option>)}</select></label></div>
     <p className="small" id="heatmap-help">One square per day. Open a filled square to revisit its log. Drafts are not counted.</p>
     <div className="heatmap-scroll" tabIndex="0" role="region" aria-label={`Reflection calendar for ${year}; scroll horizontally to see all months`} aria-describedby="heatmap-help">

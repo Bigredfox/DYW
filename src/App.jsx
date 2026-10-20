@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import BlockWordmark from './components/BlockWordmark.jsx';
 import DiscardDialog from './components/DiscardDialog.jsx';
 import ThemeControl from './components/ThemeControl.jsx';
 import Home from './components/Home.jsx';
@@ -109,7 +110,7 @@ export default function App() {
       else setScreen('drafts');
     } else main.current?.focus();
   }
-  return <div className="app"><header className="site-header"><button className="brand" onClick={home}><span className="brand-mark" aria-hidden="true">◒</span> Daily Work Log</button><div className="header-right"><ThemeControl/><span className="header-note">A moment for yourself</span>{snapshot && <div className="profile-nav" onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget)) setProfileOpen(false); }} onKeyDown={event => { if (event.key === 'Escape') { setProfileOpen(false); event.currentTarget.querySelector('button').focus(); } }}><button className="secondary" aria-expanded={profileOpen} aria-controls="profile-links" onClick={() => setProfileOpen(!profileOpen)}>Profile <span className="control-chevron" aria-hidden="true"/></button>{profileOpen && <nav id="profile-links" aria-label="Profile" className="nav-popover"><button onClick={() => navigate('logs')}>Logs</button><button onClick={() => navigate('drafts')}>Drafts</button></nav>}</div>}</div></header><main ref={main} tabIndex="-1">
+  return <div className="app"><header className="site-header"><button className="brand" onClick={home}><BlockWordmark/></button><div className="header-right"><ThemeControl/><span className="header-note">A moment for yourself</span>{snapshot && <div className="profile-nav" onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget)) setProfileOpen(false); }} onKeyDown={event => { if (event.key === 'Escape') { setProfileOpen(false); event.currentTarget.querySelector('button').focus(); } }}><button className="secondary" aria-expanded={profileOpen} aria-controls="profile-links" onClick={() => setProfileOpen(!profileOpen)}>Profile <span className="control-chevron" aria-hidden="true"/></button>{profileOpen && <nav id="profile-links" aria-label="Profile" className="nav-popover"><button onClick={() => navigate('logs')}>Logs</button><button onClick={() => navigate('drafts')}>Drafts</button></nav>}</div>}</div></header><main ref={main} tabIndex="-1">
     {loadError ? <section className="card" role="alert"><h1>Let’s keep your work safe.</h1><p>{loadError}</p><button className="primary" onClick={load}>Retry opening logs</button></section> : !snapshot ? <p role="status">Opening your space…</p> : <>
       {screen !== 'home' && <button className="back-link" onClick={home}>← Home</button>}
       {writeError && <div className="error-banner" role="alert"><p>{writeError}</p>{pending.current && <button className="secondary" onClick={retry}>Retry draft storage</button>}</div>}

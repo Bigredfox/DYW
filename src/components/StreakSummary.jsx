@@ -2,6 +2,9 @@ import { calculateStreaks } from '../lib/streaks.js';
 
 export default function StreakSummary({ savedByDate, today, showLongest = true, showDescription = true }) {
   const { current, longest } = calculateStreaks(savedByDate, today);
+  if (!showLongest && !showDescription) {
+    return <p className="streak-inline"><strong>{current}</strong> <span>day streak</span></p>;
+  }
   return <div className="streak-summary">
     <dl className="streak-stats">
       <div><dt>Current streak</dt><dd>{current} {current === 1 ? 'day' : 'days'}</dd></div>

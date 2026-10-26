@@ -1,4 +1,4 @@
-# Daily Work Log
+# DYW
 
 A personal daily reflection: six guided prompts, a review before saving, and a record of your work. This proof of concept is built in verified slices; see `devpost/checklist.md` for current progress.
 

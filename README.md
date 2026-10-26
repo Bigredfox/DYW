@@ -42,7 +42,9 @@ Start today's reflection, type a few answers, reload, and continue the draft. Co
 
 Choose another day from Home to catch up on past work. Profile → Drafts resumes unfinished entries; Profile → Logs opens weeks and saved days. Weeks run Monday–Sunday from your first-use week; older catch-up dates show “Before first use” with their date range. Future dates are rejected.
 
-Every saved day has a top-right three-dot menu with **Edit** and **Start Over**. Edit opens review with the saved answers; Start Over begins with blank answers. Existing unfinished work for the same date is resumed instead of erased. Saving a replacement asks for confirmation. Canceling, leaving, or a failed write keeps the old saved log intact.
+Every saved day has a top-right three-dot menu with **Edit**, **Start Over**, and **Delete saved log**. Edit opens review with the saved answers; Start Over begins with blank answers. Existing unfinished work for the same date is resumed instead of erased. Saving a replacement asks for confirmation. Canceling, leaving, or a failed write keeps the old saved log intact.
+
+Drafts can be discarded with confirmation. Discarding edits preserves the saved log; deleting a saved log preserves any unfinished draft. History includes a contribution calendar for opening saved days. The app also shows reflection streaks and remembers System, Light, or Dark appearance.
 
 ## Demo walkthrough
 

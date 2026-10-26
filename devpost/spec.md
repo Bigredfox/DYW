@@ -50,6 +50,8 @@ Open `http://localhost:5173`. Configure Vite to use port 5173 with strictPort so
 
 The required short demo video shows a new log, review/save, and retrieval of a past day. A public GitHub repository accompanies the video. Deployment is deferred by the learner; a web link can come later.
 
+Public source repository: https://github.com/Bigredfox/DYW. The repository contains the app and planning documents; it is not a hosted app. Demo video link: pending.
+
 ## Look and Feel
 
 Implements `prd.md > Look and Feel`; carries forward `scope.md > Inspiration & Identity`.

@@ -9,13 +9,14 @@
 
 ## Repository preparation
 
-- No Git remote configured. GitHub CLI is not available on PATH.
+- GitHub CLI installed and authenticated as Bigredfox. Git remote origin points to https://github.com/Bigredfox/DYW.git.
 - Reviewed tracked file paths across all seven commits. A scan for common credential patterns returned no matches; this is not a guarantee that no sensitive content exists.
 - learner-profile.md is ignored and has no committed history. Environment files and generated output are ignored.
 - Existing commits contain the author's name and personal email. Planning documents include personal school/project context. The user reviewed these details and explicitly agreed to publish them with the existing history, while keeping learner-profile.md excluded.
 - Local .agents/, .claude/, agent/, and skills-lock.json are untracked and outside the app publication scope.
 - README updated to describe deletion, discard, appearance, contribution history, and streaks.
-- User authorized creating the public repository Bigredfox/DYW and pushing this project. Publication verification is pending.
+- User authorized creating the public repository Bigredfox/DYW and pushing this project. Repository created and master pushed successfully: https://github.com/Bigredfox/DYW.
+- Unauthenticated GitHub API check confirmed the repository is public and the published commit matched the local project commit.
 
 ## Demo and submission
 
